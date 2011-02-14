@@ -1,5 +1,5 @@
 
-package Dancer::App::CRM::Plugin::DBIC;
+package Dancer::App::CRM::Plugin::Utils;
 
 
 use strict;
@@ -35,8 +35,10 @@ register my_schema=> sub {
 
 	my $dbname = $application->db_name;
 	
-    my @conn_info =  ("dbi:SQLite:dbname=./var/$dbname");
+    my @conn_info =  ("dbi:SQLite:dbname=t/var/$dbname");
     
+    my $db_prefix = setting('db_prefix');
+
     # pckg should be deprecated
     my $schema_class = "DB::" . $application->schema_class;
 

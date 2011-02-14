@@ -19,7 +19,7 @@ our $VERSION = '0.1';
 load_app 'Dancer::App::CRM::Admin::Login';
 load_app 'Dancer::App::CRM::Admin::Init';
 
-setting 'apphandler' => 'PSGI';
+#setting 'apphandler' => 'PSGI';
 
 set serializer => 'JSON';
 
@@ -67,9 +67,12 @@ sub authenticate {
 before sub {
 	
 	debug "coming in main before";	
-	my $app_id = request->params->{'app_id'};
 
-	send_error("Application ID cannot be found") unless $app_id;	
+	return 1 if config->{skip_authentication};
+
+	my $app_id = request->params->{'app_id'};
+	
+	return send_error("Application ID cannot be found") unless $app_id;	
 
 	&authenticate($app_id);
 	

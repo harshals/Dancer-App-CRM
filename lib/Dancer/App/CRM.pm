@@ -9,7 +9,7 @@ our $VERSION = '0.1';
 
 load_app 'Dancer::App::CRM::Base';
 
-setting 'apphandler' => 'PSGI';
+#setting 'apphandler' => 'PSGI';
 
 set serializer => 'JSON';
 

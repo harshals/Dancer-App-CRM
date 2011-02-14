@@ -1,0 +1,28 @@
+[2719] debug @0.000015> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[2719] debug @0.000537> [hit #1]Authenticate  :/ in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 29
+[2722] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[2722] debug @0.000462> [hit #1]Authenticate  :/ in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 29
+[2735] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[2740] debug @0.000017> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[2743] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3299] debug @0.000015> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3308] debug @0.000015> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3308] debug @0.002077> [hit #2]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3311] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3311] debug @0.001956> [hit #2]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3315] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3315] debug @0.001642> [hit #2]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3318] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3318] debug @0.001671> [hit #2]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3344] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3344] debug @0.001769> [hit #2]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3344] debug @0.003608> [hit #3]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3355] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3355] debug @0.002101> [hit #2]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3355] debug @0.003761> [hit #3]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3358] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3358] debug @0.002091> [hit #2]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3358] debug @0.003743> [hit #3]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3361] debug @0.000016> [hit #1]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3361] debug @0.001862> [hit #2]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
+[3361] debug @0.003947> [hit #3]coming in main before in /Users/harshal/Developments/Projects/Dancer-App-CRM/lib/Dancer/App/CRM/Base.pm l. 69
