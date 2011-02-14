@@ -1,0 +1,8 @@
+# unzipped data
+*.csv
+
+# dumped sqlite files
+*.sql
+
+# test database
+*.db
