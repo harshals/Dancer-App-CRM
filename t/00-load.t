@@ -22,7 +22,7 @@ use Test::More ;
 
 use_ok("Dancer::App::CRM");
 use_ok("Dancer::App::CRM::Admin::Init");
-use_ok("Dancer::App::CRM::Plugin::DBIC");
+use_ok("Dancer::App::CRM::Plugin::Utils");
 use_ok("Dancer::App::CRM::Admin::Login");
 use_ok("Dancer::App::CRM::Base");
 

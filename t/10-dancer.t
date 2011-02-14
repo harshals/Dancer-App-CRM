@@ -32,18 +32,25 @@ set plugins => {
             dsn =>  "dbi:SQLite:dbname=t/var/master.db",
             schema_class => 'Master'
         },
-		master => {
+		db => {
             dsn =>  "dbi:SQLite:dbname=t/var/small.db",
             schema_class => 'Schema'
         },
-    }.
+    }
     
 };
 
+set serializer => '';
 
 response_status_is    [ GET => '/' ], 200,   "GET / is found";
 
 response_content_like [ GET => '/' ], qr/Hello World/;
+
+my $response = dancer_response GET => '/api/Book';
+
+diag Dumper($response);
+
+response_content_like [ GET => '/api/Book' ], qr/Overridden/;
 
 ## testing for routes in base methods 
 

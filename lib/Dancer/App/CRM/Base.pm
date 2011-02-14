@@ -8,7 +8,7 @@ use Data::Dumper;
 use Plack::Middleware::Debug::DBIC::QueryLog;
 
 
-use Dancer::App::CRM::Plugin::DBIC;
+use Dancer::App::CRM::Plugin::Utils;
 
 our $VERSION = '0.1';
 
@@ -81,23 +81,28 @@ before sub {
 
 ## get list of all items
 
-get '/api/:model' => sub {
+get '/api/:model/:len' => sub {
 
     my $model = request->params->{'model'};
 	my $schema = my_schema;
+	my $len = request->params->{'len'} || 10;
+	my $serialize = request->params->{'serialize'} || '';
 
-	return { data => $schema->resultset($model)->recent(10)->serialize , message => "" };
+	return { data => $schema->resultset($model)->recent($len)->serialize($serialize) , message => "" };
 	
 };
 
-get '/api/:model/search' => sub {
+## predefined or saved search
+
+get '/api/:model/search/:search_id' => sub {
 	
 
     my $model = request->params->{'model'};
 	my $schema = my_schema;
-	
+	my $search_id = request->params->{'search_id'}
+	my $serialize = request->params->{'serialize'} || '';
 
-	return { data => $schema->resultset($model)->look_for(request->params)->serialize }
+	return { data => $schema->resultset($model)->look_for->serialize($serialize) }
 };
 
 any '/api/:model/custom/:query' => sub {
@@ -105,12 +110,12 @@ any '/api/:model/custom/:query' => sub {
 	my $model = request->params->{'model'};
 	my $schema = my_schema;
 	
-	debug ref $schema->resultset($model) ;
 	my $query = request->params->{'query'};
+	my $serialize = request->params->{'serialize'} || '';
 
 	if ($schema->resultset($model)->can($query)) {
 
-		return { data => $schema->resultset($model)->$query(request->params)->serialize }
+		return { data => $schema->resultset($model)->look_for->$query(request->params->{$model})->serialize($serialize) }
 	}else {
 		
 		send_error("Unkown query > $query ");

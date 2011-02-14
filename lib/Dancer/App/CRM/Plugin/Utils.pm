@@ -15,7 +15,12 @@ DBIx::Class::Schema::Loader->naming('v7');
 
 my $my_schemas = {};
 
-register my_schema=> sub {
+register my_schema => sub {
+	
+	return schema('db');
+};
+
+register my_schema2 => sub {
 
 	my $name = shift;
 	
@@ -26,7 +31,7 @@ register my_schema=> sub {
 
     return $my_schemas->{$application_id} if $my_schemas->{$application_id};
 
-	my $application = schema('db')->resultset("Application")->find(session('app_id'));
+	my $application = schema('master')->resultset("Application")->find(session('app_id'));
 
 	## borrow generic options of master db
 

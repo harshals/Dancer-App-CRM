@@ -38,7 +38,7 @@ get '/login' => sub {
 
 post '/login' => sub {
 	
-	my $master = schema('db');
+	my $master = schema('master');
 	my $user;
 
 	if ( $user = $master->resultset('User')->authenticate({ request->params })) {

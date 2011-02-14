@@ -11,7 +11,7 @@ load_app 'Dancer::App::CRM::Base';
 
 #setting 'apphandler' => 'PSGI';
 
-set serializer => 'JSON';
+#set serializer => 'JSON';
 
 true;
 

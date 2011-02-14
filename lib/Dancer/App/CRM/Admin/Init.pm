@@ -26,7 +26,7 @@ use Dancer::Plugin::DBIC;
 
 get '/init/:username/:application' => sub {
 	
-	my $db = schema('db');
+	my $db = schema('master');
 	my $username = params->{'username'};
 	my $application = params->{'application'};
 	

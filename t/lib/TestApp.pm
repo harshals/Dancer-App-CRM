@@ -28,6 +28,11 @@ get '/' => sub {
 	return "Hello World";
 };
 
+get '/api/Book' => sub {
+	
+	return "Overridden !"
+};
+
 1;
 
 
