@@ -46,11 +46,11 @@ response_status_is    [ GET => '/' ], 200,   "GET / is found";
 
 response_content_like [ GET => '/' ], qr/Hello World/;
 
-my $response = dancer_response GET => '/api/Book';
+my $response = dancer_response GET => '/api/Book', { params => { _s => 2 , _pl => 2 } }	;
 
 diag Dumper($response);
 
-response_content_like [ GET => '/api/Book' ], qr/Overridden/;
+response_content_like [ GET => '/api/Book/3' ], qr/Overridden/;
 
 ## testing for routes in base methods 
 

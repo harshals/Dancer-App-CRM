@@ -68,6 +68,8 @@ before sub {
 	
 	debug "coming in main before";	
 
+	my $schema = my_schema;
+
 	return 1 if config->{skip_authentication};
 
 	my $app_id = request->params->{'app_id'};
@@ -76,19 +78,32 @@ before sub {
 
 	&authenticate($app_id);
 	
+	var serialize_options => [
+	
+		request->params->{_s} || 8, ## serializer option no.
+		request->params->{_ik} || undef ## serializer index key
+	];
+
+	var search_attributes => {
+
+	 	page 	=> 	request->params->{_p} || undef , ## page_no
+	 	rows	 => request->params->{_pl} || 10,
+	 	order_by => request->params->{_ob} || undef  ## order by
+	};
+
 };
 
 
 ## get list of all items
 
-get '/api/:model/:len' => sub {
+any '/api/:model' => sub {
 
     my $model = request->params->{'model'};
 	my $schema = my_schema;
-	my $len = request->params->{'len'} || 10;
-	my $serialize = request->params->{'serialize'} || '';
 
-	return { data => $schema->resultset($model)->recent($len)->serialize($serialize) , message => "" };
+	return { data => $schema->resultset($model)	->look_for(undef, vars->{search_attributes})
+												->from_cgi_params(request->params->{$model})
+												->serialize(@{ vars->{serialize_options} } ) , message => "" };
 	
 };
 
@@ -99,29 +114,32 @@ get '/api/:model/search/:search_id' => sub {
 
     my $model = request->params->{'model'};
 	my $schema = my_schema;
-	my $search_id = request->params->{'search_id'}
-	my $serialize = request->params->{'serialize'} || '';
+	my $search_id = request->params->{'search_id'};
 
-	return { data => $schema->resultset($model)->look_for->serialize($serialize) }
+
+	return { data => $schema->resultset($model)	->look_for
+												->serialize(@{ vars->{serialize_options} } ) , message => "" };
 };
 
-any '/api/:model/custom/:query' => sub {
+
+## fire custom queries
+
+get '/api/:model/custom/:query' => sub {
 
 	my $model = request->params->{'model'};
 	my $schema = my_schema;
 	
 	my $query = request->params->{'query'};
-	my $serialize = request->params->{'serialize'} || '';
 
 	if ($schema->resultset($model)->can($query)) {
 
-		return { data => $schema->resultset($model)->look_for->$query(request->params->{$model})->serialize($serialize) }
+		return { data => $schema->resultset($model)->look_for->$query(request->params->{$model})
+												->serialize(@{ vars->{serialize_options} } ) , message => "" };
 	}else {
 		
 		send_error("Unkown query > $query ");
 	}
 	
-
 };
 
 #get single item
@@ -134,9 +152,9 @@ get '/api/:model/:id' => sub {
 
 	#my $schema = my_schema('db');
 	
-	my $row = $schema->resultset($model)->fetch(request->params->{id});
+	my $row = $schema->resultset($model)->fetch($id);
 
-	return { data => $row->serialize, message => "" };
+	return { data => $row->serialize(@{ vars->{serialize_options} } ), message => "" };
 	
 };
 
@@ -148,47 +166,32 @@ post '/api/:model/:id' => sub {
 	my $id = request->params->{'id'};
 	my $schema = my_schema;
 	
-	#my $schema = my_schema('db');
-
-	my $row = $schema->resultset($model)->fetch(request->params->{id});
+	my $row = $schema->resultset($model)->fetch($id);
 
 	return ( { data => {}, error => "row not found" }) unless $row;
 
-	$row->save(request->params);
+	$row->save(request->params->{$model});
 	
-	return { data => $row->serialize };
-};
-
-# submit a search request
-
-post '/api/:model' => sub {
-	
-	my $model = request->params->{'model'};
-	my $schema = my_schema;
-	
-	#my $schema = my_schema('db');
-
-	my $new = $schema->resultset($model)->fetch_new();
-
-	$new->save(request->params);
-	
-	return { data => $new->serialize , message => "saved successfully"};
+	return { data => $row->serialize(@{ vars->{serialize_options} } ), message => '' };
 };
 
 # create new item
+
 post '/api/:model/new' => sub {
 	
 	my $model = request->params->{'model'};
+	my $id = request->params->{'id'};
 	my $schema = my_schema;
 	
-	#my $schema = my_schema('db');
+	my $row = $schema->resultset($model)->fetch_new($id);
 
-	my $new = $schema->resultset($model)->fetch_new();
+	return ( { data => {}, error => "row not found" }) unless $row;
 
-	$new->save(request->params);
+	$row->save(request->params->{$model});
 	
-	return { data => $new->serialize , message => "saved successfully"};
+	return { data => $row->serialize(@{ vars->{serialize_options} } ), message => '' };
 };
+
 
 any 'error' => sub {
 	
