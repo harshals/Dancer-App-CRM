@@ -55,38 +55,37 @@ response_content_like [ GET => '/' ], qr/Hello World/;
 ## pagination tests
 
 my $task_content = {
-		'1' => {
-                    'task_status' => 'Success',
-                    '_id' => '02985B28-3836-11E0-999D-8CDC1E1865CA',
-                    'name' => 'call_Jorge',
-                    'place' => undef,
-                    'description' => 'Discuss_china_strategy',
-                    'due_date' => '2011-02-14',
-                    'assigned_to' => '4',
-                    'assigned_by' => '2',
-                    'id' => '1',
-                    'log' => undef,
-                    'category' => undef
-                  },
-           '2' => {
-                    'task_status' => 'Incomplete',
-                    '_id' => '029A37E0-3836-11E0-94EA-8CDC1E1865CA',
-                    'name' => 'meet_nancy',
-                    'place' => undef,
-                    'description' => 'Discuss_logistics',
-                    'due_date' => '2011-02-14',
-                    'assigned_to' => '4',
-                    'assigned_by' => '2',
-                    'id' => '2',
-                    'log' => undef,
-                    'category' => undef
-                  }
-	};
+
+   '1' => {
+			'task_status' => 'Success',
+			'_id' => '29E487D4-3858-11E0-B196-B3B4681FBF59',
+			'name' => 'call_Jorge',
+			'place' => undef,
+			'description' => 'Discuss_china_strategy',
+			'due_date' => '2011-02-14',
+			'assigned_to' => 4,
+			'assigned_by' => 2,
+			'id' => 1,
+			'log' => undef,
+			'category' => undef
+		  },
+   '2' => {
+			'task_status' => 'Incomplete',
+			'_id' => '29E5C662-3858-11E0-94B3-B3B4681FBF59',
+			'name' => 'meet_nancy',
+			'place' => undef,
+			'description' => 'Discuss_logistics',
+			'due_date' => '2011-02-14',
+			'assigned_to' => 4,
+			'assigned_by' => 2,
+			'id' => 2,
+			'log' => undef,
+			'category' => undef
+		  }
+};
 
 
 my $response = dancer_response GET => '/api/Task', { params => { _s => 7 , _pl => 2, _p => 1, _ik=> 'id' } }	;
-
-#diag Dumper($response->content->{'data'});
 
 is_deeply($response->content->{'data'}, $task_content, "Returned correct data structure");
 
@@ -118,19 +117,21 @@ delete $single_task{'id'};
 
 $response = dancer_response PUT => '/api/Task', { params => {  Task => \%single_task } }	;
 
-diag Dumper($response);
+ok(defined $response->content->{data}->{id}   ,  "New task successfully created");
+
 
 #response_status_is    [ GET => '/api/Task/2' ], 500,   "Object not found";
 
 my $new_response ;
 
-eval {
-	$new_response = dancer_response GET => '/api/Task/2', { params => { _s => 8 ,  _ik=> 'id' } }	;
-};
-if ($@) {
+SKIP: {
+	eval { dancer_response GET => '/api/Task/2', { params => { _s => 8 ,  _ik=> 'id' } } }	;
 
-diag Dumper($new_response);
+	skip "Can't find 2nd task ..it must be deleted", 1 if $@;
+
 }
+
+
 
 #response_content_like [ GET => '/api/Book/3' ], qr/Overridden/;
 

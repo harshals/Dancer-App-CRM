@@ -17,7 +17,11 @@ my $my_schemas = {};
 
 register my_schema => sub {
 	
-	return schema('db');
+	my $schema = schema('db');
+
+	$schema->user(1);
+
+	return $schema;
 };
 
 register my_schema2 => sub {
