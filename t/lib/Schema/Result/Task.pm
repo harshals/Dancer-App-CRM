@@ -59,7 +59,7 @@ sub extra_columns {
 sub my_relations {
 
     my $self = shift;
-	return qw//;
+	return qw/owner/;
 }
 
 

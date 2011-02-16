@@ -66,7 +66,6 @@ sub authenticate {
 
 before sub {
 	
-	debug "coming in main before";	
 
 	my $schema = my_schema;
 
@@ -96,6 +95,7 @@ before sub {
 
 
 ## get list of all items
+
 
 any '/api/:model' => sub {
 
@@ -134,8 +134,9 @@ get '/api/:model/custom/:query' => sub {
 
 	if ($schema->resultset($model)->can($query)) {
 
-		return { data => $schema->resultset($model)->look_for->$query(request->params->{$model})
-												->serialize(@{ vars->{serialize_options} } ) , message => "" };
+		return { data => $schema->resultset($model)	->look_for(undef, vars->{search_attributes})
+													->$query(request->params->{$model})
+													->serialize(@{ vars->{serialize_options} } ) , message => "" };
 	}else {
 		
 		send_error("Unkown query > $query ");
@@ -176,15 +177,32 @@ post '/api/:model/:id' => sub {
 	return { data => $row->serialize(@{ vars->{serialize_options} } ), message => '' };
 };
 
-# create new item
-
-post '/api/:model/new' => sub {
+# delete a single item
+del '/api/:model/:id' => sub {
 	
 	my $model = request->params->{'model'};
 	my $id = request->params->{'id'};
 	my $schema = my_schema;
 	
-	my $row = $schema->resultset($model)->fetch_new($id);
+	my $row = $schema->resultset($model)->fetch($id);
+
+	return ( { data => {}, error => "row not found" }) unless $row;
+
+	$row->remove;
+	
+	return { data => $row->serialize(@{ vars->{serialize_options} } ), message => 'Object Deleted' };
+};
+
+
+# create new item
+
+put '/api/:model' => sub {
+	
+	my $model = request->params->{'model'};
+	my $id = request->params->{'id'};
+	my $schema = my_schema;
+	
+	my $row = $schema->resultset($model)->fetch_new;
 
 	return ( { data => {}, error => "row not found" }) unless $row;
 
