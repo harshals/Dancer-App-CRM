@@ -21,7 +21,7 @@ load_app 'Dancer::App::CRM::Admin::Init';
 
 #setting 'apphandler' => 'PSGI';
 
-set serializer => 'JSON';
+#set serializer => 'JSON';
 
 sub authenticate {
 
@@ -90,6 +90,7 @@ before sub {
 	 	rows	 => request->params->{_pl} || 10,
 	 	order_by => request->params->{_ob} || undef  ## order by
 	};
+
 
 };
 

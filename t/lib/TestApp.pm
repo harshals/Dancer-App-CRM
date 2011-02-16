@@ -23,14 +23,31 @@ use Dancer qw(:syntax);
 
 load_app 'Dancer::App::CRM';
 
+before sub {
+	
+	var search_attributes => {
+
+	 	page 	=> 	request->params->{_p} || undef , ## page_no
+	 	rows	 => request->params->{_pl} || 10,
+	 	order_by => request->params->{_ob} || undef  ## order by
+	};
+	var serialize_options => [
+	
+		request->params->{_s} || 8, ## serializer option no.
+		request->params->{_ik} || undef ## serializer index key
+	];
+
+
+};
+
 get '/' => sub {
 	
 	return "Hello World";
 };
 
-get '/api/Book' => sub {
+get '/debug' => sub {
 	
-	return "Overridden !"
+	return { data =>    vars->{serialize_options}   };
 };
 
 1;

@@ -42,15 +42,23 @@ set plugins => {
 
 set serializer => '';
 
+set 'show_errors' => 1;
+
+set 'log' => 'debug';
+
+set 'traces' => 1;
+
 response_status_is    [ GET => '/' ], 200,   "GET / is found";
 
 response_content_like [ GET => '/' ], qr/Hello World/;
 
-my $response = dancer_response GET => '/api/Book', { params => { _s => 2 , _pl => 2 } }	;
+## pagination tests
+
+my $response = dancer_response GET => '/api/Book', { params => { _s => 5 , _pl => 1, _p => 1 } }	;
 
 diag Dumper($response);
 
-response_content_like [ GET => '/api/Book/3' ], qr/Overridden/;
+#response_content_like [ GET => '/api/Book/3' ], qr/Overridden/;
 
 ## testing for routes in base methods 
 
