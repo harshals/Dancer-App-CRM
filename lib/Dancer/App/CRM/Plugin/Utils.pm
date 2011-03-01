@@ -20,7 +20,6 @@ register my_schema => sub {
 	
 	my $schema = schema('db');
 
-	$schema->user(1);
 
 	return $schema;
 };
