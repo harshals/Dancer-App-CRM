@@ -2,6 +2,7 @@ package Dancer::App::CRM;
 
 use Dancer ':syntax';
 
+# ABSTRACT: Base class for CRM application
 
 our $VERSION = '0.1';
 

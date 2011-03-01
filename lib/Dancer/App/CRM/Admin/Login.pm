@@ -24,6 +24,7 @@ use Dancer ':syntax';
 use Dancer::Plugin::DBIC;
 use Dancer::Plugin::FlashMessage;
 
+# ABSTRACT: Authentication & Authorization subroutines
 get '/logout' => sub {
 	
 	session $_ => '' foreach qw/user_id app_id app_name id/;

@@ -6,12 +6,15 @@ use Dancer::Plugin::FlashMessage;
 use Dancer::Plugin::Memcached;
 use Data::Dumper;
 use Plack::Middleware::Debug::DBIC::QueryLog;
+use Jemplate::Runtime;
+use File::Find::Rule;
 
 
 use Dancer::App::CRM::Plugin::Utils;
 
 our $VERSION = '0.1';
 
+# ABSTRACT: Base class for database routes 
 
 ## index method, simply list 
 
@@ -66,8 +69,22 @@ sub authenticate {
 
 before sub {
 	
+	var serialize_options => [
+	
+		request->params->{_s} || 8, ## serializer option no.
+		request->params->{_ik} || undef ## serializer index key
+	];
+	
+	var search_attributes => {
+
+	 	page 	=> 	request->params->{_p} || undef , ## page_no
+	 	rows	 => request->params->{_pl} || 10,
+	 	order_by => request->params->{_ob} || undef  ## order by
+	};
+
 
 	my $schema = my_schema;
+	$schema->init_debugger(request->env->{+Plack::Middleware::Debug::DBIC::QueryLog::PSGI_KEY});
 
 	return 1 if config->{skip_authentication};
 
@@ -77,20 +94,7 @@ before sub {
 
 	&authenticate($app_id);
 	
-	var serialize_options => [
 	
-		request->params->{_s} || 8, ## serializer option no.
-		request->params->{_ik} || undef ## serializer index key
-	];
-
-	var search_attributes => {
-
-	 	page 	=> 	request->params->{_p} || undef , ## page_no
-	 	rows	 => request->params->{_pl} || 10,
-	 	order_by => request->params->{_ob} || undef  ## order by
-	};
-
-
 };
 
 
@@ -154,7 +158,7 @@ get '/api/:model/:id' => sub {
 
 	#my $schema = my_schema('db');
 	
-	my $row = $schema->resultset($model)->fetch($id);
+	my $row = ($id eq 'new' ) ? $schema->resultset($model)->fetch_new() :$schema->resultset($model)->fetch($id);
 
 	return { data => $row->serialize(@{ vars->{serialize_options} } ), message => "" };
 	
@@ -221,6 +225,7 @@ any 'error' => sub {
    	);
    	$error->render;
 };
+
 
 after sub {
 	

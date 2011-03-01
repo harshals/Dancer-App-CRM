@@ -12,6 +12,7 @@ use DBIx::Class;
 use DBIx::Class::Schema::Loader;
 DBIx::Class::Schema::Loader->naming('v7');
 
+# ABSTRACT: custom schema class
 
 my $my_schemas = {};
 

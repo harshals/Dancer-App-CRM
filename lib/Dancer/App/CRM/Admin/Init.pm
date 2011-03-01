@@ -23,6 +23,7 @@ use warnings;
 use Dancer ':syntax';
 use Dancer::Plugin::DBIC;
 
+# ABSTRACT: Things to do when starting a new client 
 
 get '/init/:username/:application' => sub {
 	

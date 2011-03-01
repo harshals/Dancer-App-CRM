@@ -58,7 +58,6 @@ my $task_content = {
 
    '1' => {
 			'task_status' => 'Success',
-			'_id' => '29E487D4-3858-11E0-B196-B3B4681FBF59',
 			'name' => 'call_Jorge',
 			'place' => undef,
 			'description' => 'Discuss_china_strategy',
@@ -71,7 +70,6 @@ my $task_content = {
 		  },
    '2' => {
 			'task_status' => 'Incomplete',
-			'_id' => '29E5C662-3858-11E0-94B3-B3B4681FBF59',
 			'name' => 'meet_nancy',
 			'place' => undef,
 			'description' => 'Discuss_logistics',
@@ -87,12 +85,15 @@ my $task_content = {
 
 my $response = dancer_response GET => '/api/Task', { params => { _s => 7 , _pl => 2, _p => 1, _ik=> 'id' } }	;
 
+delete $response->content->{'data'}->{$_}->{_id} foreach (1,2);
+
 is_deeply($response->content->{'data'}, $task_content, "Returned correct data structure");
 
 my %single_task = map { $_ => $task_content->{2}->{$_} } (grep  { defined $task_content->{2}->{$_} } keys %{ $task_content->{2}} );
 
 $response = dancer_response GET => '/api/Task/2', { params => { _s => 8 ,  _ik=> 'id' } }	;
 
+delete $response->content->{'data'}->{_id} ;
 is_deeply($response->content->{'data'}, \%single_task, "Returned 2nd correct data structure");
 
 $response = dancer_response GET => '/api/Task', { params => { _s => 8 , _pl => 3, _p => 1 , Task=> { task_status => 'Success' } } }	;
