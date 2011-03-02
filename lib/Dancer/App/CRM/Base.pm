@@ -81,11 +81,13 @@ before sub {
 	 	rows	 => request->params->{_pl} || 10,
 	 	order_by => request->params->{_ob} || undef  ## order by
 	};
-
-
+	
 	my $schema = my_schema;
-	$schema->init_debugger(request->env->{+Plack::Middleware::Debug::DBIC::QueryLog::PSGI_KEY});
 
+	$schema->user(1);
+	$schema->debug(1);
+	$schema->env(request->env);
+	#$schema->init_debugger(request->env->{+Plack::Middleware::Debug::DBIC::QueryLog::PSGI_KEY});
 	return 1 if config->{skip_authentication};
 
 	my $app_id = request->params->{'app_id'};
