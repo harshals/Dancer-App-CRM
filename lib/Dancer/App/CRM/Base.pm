@@ -138,10 +138,13 @@ get '/api/:model/custom/:query' => sub {
 	
 	my $query = request->params->{'query'};
 
+	my $model_params = request->params->{$model};
+	
+	
 	if ($schema->resultset($model)->can($query)) {
 
 		return { data => $schema->resultset($model)	->look_for(undef, vars->{search_attributes})
-													->$query(request->params->{$model})
+													->$query(( ref $model_params eq 'ARRAY') ? @$model_params : $model_params )
 													->serialize(@{ vars->{serialize_options} } ) , message => "" };
 	}else {
 		
@@ -174,7 +177,7 @@ post '/api/:model/:id' => sub {
 	my $id = request->params->{'id'};
 	my $schema = my_schema;
 	
-	my $row = $schema->resultset($model)->fetch($id);
+	my $row = ($id eq 'new' ) ? $schema->resultset($model)->fetch_new() :$schema->resultset($model)->fetch($id);
 
 	return ( { data => {}, error => "row not found" }) unless $row;
 

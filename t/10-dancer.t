@@ -40,6 +40,8 @@ set plugins => {
     
 };
 
+set logger => 'file';
+
 set serializer => '';
 
 set 'show_errors' => 1;
@@ -47,6 +49,8 @@ set 'show_errors' => 1;
 set 'log' => 'debug';
 
 set 'traces' => 1;
+
+set 'show_errors' => 1;
 
 response_status_is    [ GET => '/' ], 200,   "GET / is found";
 
@@ -57,7 +61,7 @@ response_content_like [ GET => '/' ], qr/Hello World/;
 my $task_content = {
 
    '1' => {
-			'task_status' => 'Success',
+			'task_status' => 'Completed',
 			'name' => 'call_Jorge',
 			'place' => undef,
 			'description' => 'Discuss_china_strategy',
@@ -96,7 +100,7 @@ $response = dancer_response GET => '/api/Task/2', { params => { _s => 8 ,  _ik=>
 delete $response->content->{'data'}->{_id} ;
 is_deeply($response->content->{'data'}, \%single_task, "Returned 2nd correct data structure");
 
-$response = dancer_response GET => '/api/Task', { params => { _s => 8 , _pl => 3, _p => 1 , Task=> { task_status => 'Success' } } }	;
+$response = dancer_response GET => '/api/Task', { params => { _s => 8 , _pl => 3, _p => 1 , Task=> { task_status => 'Completed' } } }	;
 
 is (scalar(@{ $response->content->{data} })  , 3 , "Found three successfully completed tasks");
 
@@ -120,8 +124,13 @@ $response = dancer_response PUT => '/api/Task', { params => {  Task => \%single_
 
 ok(defined $response->content->{data}->{id}   ,  "New task successfully created");
 
+$response = dancer_response GET => '/api/Enumeration/custom/for', { params => {  Enumeration => [ 'Task', 'task_status'  ]  } }	;
 
+
+#ok(defined $response->content->{data}->{id}   ,  "New task successfully created");
 #response_status_is    [ GET => '/api/Task/2' ], 500,   "Object not found";
+
+diag Dumper($response);
 
 my $new_response ;
 

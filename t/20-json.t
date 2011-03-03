@@ -50,7 +50,7 @@ set 'traces' => 1;
 
 my $response = dancer_response GET => '/api/Task', { params => { _s => 4 , _pl => 10, _p => 1  } }	;
 
-diag($response->content);
+#diag($response->content);
 
 #response_content_like [ GET => '/api/Book/3' ], qr/Overridden/;
 
