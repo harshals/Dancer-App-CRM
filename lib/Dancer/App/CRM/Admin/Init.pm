@@ -22,6 +22,7 @@ use warnings;
 
 use Dancer ':syntax';
 use Dancer::Plugin::DBIC;
+use Dancer::Plugin::Email;
 
 # ABSTRACT: Things to do when starting a new client 
 
@@ -62,6 +63,18 @@ get '/init/:username/:application' => sub {
 	return "Application $application created with user $username";
 };
 
+get '/email/:to'  => sub {
+
+	my $msg = vars->{msg} || 'kissing my ass';
+	my $subject = vars->{subject} || 'kiss my ass';
+
+	email {
+            to => params->{'to'},
+            subject => $subject,
+            message => $msg,
+	};
+
+};
 1;
 
 
