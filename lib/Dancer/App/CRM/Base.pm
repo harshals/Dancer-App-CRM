@@ -4,10 +4,8 @@ use Dancer ':syntax';
 use Dancer::Plugin::DBIC;
 use Dancer::Plugin::FlashMessage;
 use Dancer::Plugin::Memcached;
-use Data::Dumper;
 use Plack::Middleware::Debug::DBIC::QueryLog;
-use Jemplate::Runtime;
-use File::Find::Rule;
+#use File::Find::Rule;
 
 
 use Dancer::App::CRM::Plugin::Utils;
@@ -22,18 +20,14 @@ our $VERSION = '0.1';
 load_app 'Dancer::App::CRM::Admin::Login';
 load_app 'Dancer::App::CRM::Admin::Init';
 
-#setting 'apphandler' => 'PSGI';
-
-#set serializer => 'JSON';
 
 sub authenticate {
 
-	my $app_id = shift;
-	debug "Authenticate $app_id :" . request->path_info ;
 	
 	if (request->path_info !~ m{^/(login|init)}) {
 		
-		if (!session('user_id') || session('app_id') ne $app_id) {
+		if (!session('user_id') || !session('app_id') ) {
+		#if (!session('user_id') || session('app_id') ne $app_id) {
 
 			flash requested_path => request->path_info;
 			request->path_info('/login');
@@ -44,7 +38,7 @@ sub authenticate {
 
 			my $schema = my_schema;       
 
-			$schema->init_debugger(request->env->{+Plack::Middleware::Debug::DBIC::QueryLog::PSGI_KEY});
+			#$schema->init_debugger(request->env->{+Plack::Middleware::Debug::DBIC::QueryLog::PSGI_KEY});
 
 			if (exists request->params->{model}) {
 
@@ -87,14 +81,16 @@ before sub {
 	$schema->user(1);
 	$schema->debug(1);
 	$schema->env(request->env);
+
 	#$schema->init_debugger(request->env->{+Plack::Middleware::Debug::DBIC::QueryLog::PSGI_KEY});
+
 	return 1 if config->{skip_authentication};
 
-	my $app_id = request->params->{'app_id'};
+	#my $app_id = request->params->{'app_id'};
 	
-	return send_error("Application ID cannot be found") unless $app_id;	
+	#return send_error("Application ID cannot be found") unless $app_id;	
 
-	&authenticate($app_id);
+	&authenticate();
 	
 	
 };

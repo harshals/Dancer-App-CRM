@@ -25,6 +25,11 @@ use Dancer::Plugin::DBIC;
 use Dancer::Plugin::FlashMessage;
 
 # ABSTRACT: Authentication & Authorization subroutines
+
+before sub {
+		
+};
+
 get '/logout' => sub {
 	
 	session $_ => '' foreach qw/user_id app_id app_name id/;
@@ -44,9 +49,7 @@ post '/login' => sub {
 
 	if ( $user = $master->resultset('User')->authenticate({ request->params })) {
      	
-     	debug "my user data " . ref $user;
-
-        session user_id => $user->id;
+        session "user_id" => $user->id;
 
 		my $application = $user->application;
 		
