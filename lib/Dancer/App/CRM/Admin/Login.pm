@@ -30,6 +30,27 @@ before sub {
 		
 };
 
+get '/register' => sub {
+	
+	template 'register';
+};
+
+post '/register' => sub {
+	
+	my $master = schema('master');
+	my $user_rs = $master->resultset("User");
+
+	## check if username exists or not
+	
+	if ($user_rs->search({'username' => params->{'username' } })->count) {
+			
+		template 'register' , { 'status'=> 0, 'message' => "username already exists" };
+	}else {
+
+	}
+
+};
+
 get '/logout' => sub {
 	
 	session $_ => '' foreach qw/user_id app_id app_name id/;
