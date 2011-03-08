@@ -26,6 +26,10 @@ use Dancer::Plugin::Email;
 
 # ABSTRACT: Things to do when starting a new client 
 
+before sub {
+	
+};
+
 get '/init/:username/:application' => sub {
 	
 	my $db = schema('master');
@@ -68,13 +72,106 @@ get '/email/:to'  => sub {
 	my $msg = vars->{msg} || 'kissing my ass';
 	my $subject = vars->{subject} || 'kiss my ass';
 
-	email {
-            to => params->{'to'},
+
+	my $output = email {
+            to => 'harshal@mki.in',
+            #to => params->{'to'},
             subject => $subject,
             message => $msg,
 	};
 
+	return { message => ($output) ? "Sent OK" : "Sorry ! try again" };
 };
+
+get '/register' => sub {
+	
+	template 'register';
+}
+
+post '/register' => {
+	
+	my $username = params->{'username'};
+	my $password = params->{'password'};
+
+	my $db = schema('master');
+	
+	my $user_rs = $db->resultset("User");
+
+	if ( $user_rs->search({ 'username' => $username })->count) {
+		
+		return template 'register' , { message => "Username already Exists" };
+	}
+	
+	my $user = $user_rs->find_or_create( { 	username => $username, 
+											password => $password, 
+											question_id => params->{'question_id'} || 1,
+											answer => params->{'answer'},
+											first_name => params->{'first_name'},
+											last_name => params->{'last_name'},
+											company => params->{'company'}
+									});
+	my $name = params->{'name'};
+
+	## send an email
+	
+	email {
+            to => $username,
+            subject => "Thank you for registering with Adhril",
+            message => <<DATA
+			
+Thank you for registeration. You have regisereted using
+
+Username : $username
+Password : $password
+
+Kindly visit /login to move further.
+
+Adhril.
+
+DATA
+	};
+
+	$user_rs->create({ username => $username, password => $password });
+
+	template 'login';
+};
+
+get '/forgot_password' => sub {
+
+	template 'forgot_password';
+};
+
+
+post '/forgot_password' => sub {
+	
+	my $db = schema('master');
+	
+	my $user_rs = $db->resultset("User");
+
+	if ( $user_rs->search({ 'username' => params->{'username'} })->count) {
+		
+		my $user = $user_rs->search({ 'username' => params->{'username'} })->first;
+
+		if ($user->question_id eq params->{'question_id'} && $user->answer eq params->{'answer'}) {
+			
+			$user->password(params->{'password'});
+
+			$user->update;
+			
+			return template 'login', { message => 'Password changed successfully'};
+		} else {
+
+			return template 'forgot_password', { message => "Answer does not match ."  };
+		}
+
+	}else {
+		
+		return template 'forgot_password', { message => "No such user found."  };
+	}
+};
+
+
+
 1;
 
 
