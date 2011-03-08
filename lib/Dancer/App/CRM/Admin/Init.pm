@@ -72,23 +72,23 @@ get '/email/:to'  => sub {
 	my $msg = vars->{msg} || 'kissing my ass';
 	my $subject = vars->{subject} || 'kiss my ass';
 
-
 	my $output = email {
             to => 'harshal@mki.in',
-            #to => params->{'to'},
             subject => $subject,
             message => $msg,
+            from => 'info@adhril.com'
 	};
-
+	
+	
 	return { message => ($output) ? "Sent OK" : "Sorry ! try again" };
 };
 
 get '/register' => sub {
 	
 	template 'register';
-}
+};
 
-post '/register' => {
+post '/register' => sub {
 	
 	my $username = params->{'username'};
 	my $password = params->{'password'};
