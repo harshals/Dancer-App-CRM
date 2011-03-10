@@ -90,19 +90,24 @@ get '/register' => sub {
 
 post '/register' => sub {
 	
-	my $username = params->{'username'};
+
+	my $username = params->{'email'};
 	my $password = params->{'password'};
 
 	my $db = schema('master');
 	
+	$db->user(1);
 	my $user_rs = $db->resultset("User");
 
 	if ( $user_rs->search({ 'username' => $username })->count) {
 		
 		return template 'register' , { message => "Username already Exists" };
 	}
-	
-	my $user = $user_rs->find_or_create( { 	username => $username, 
+
+		debug  "crap me";
+	my $user = $user_rs->fetch_new();
+
+	$user->save( { 	username => $username, 
 											password => $password, 
 											question_id => params->{'question_id'} || 1,
 											answer => params->{'answer'},
@@ -146,6 +151,8 @@ post '/forgot_password' => sub {
 	
 	my $db = schema('master');
 	
+	$db->user(1);
+
 	my $user_rs = $db->resultset("User");
 
 	if ( $user_rs->search({ 'username' => params->{'username'} })->count) {
