@@ -50,6 +50,10 @@ post '/login' => sub {
 
 	my $user;
 
+	my $search = { request->params };
+
+	$search->{'app_id'} = config->{'app_id'};
+
 	if ( $user = $master->resultset('User')->authenticate({ request->params })) {
      	
         session "user_id" => $user->id;
@@ -60,9 +64,14 @@ post '/login' => sub {
 		
 		session app_name => $application->name;
      			
+		session login_attempt => 0;
+
         redirect flash('requested_path') || '/';
 
     } else {
+
+		session login_attempt => session("login_attempt") + 1;
+
         redirect '/login?failed=1';
     }
 

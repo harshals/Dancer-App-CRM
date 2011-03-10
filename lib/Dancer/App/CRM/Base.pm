@@ -22,12 +22,13 @@ load_app 'Dancer::App::CRM::Admin::Init';
 
 
 sub authenticate {
-
+	
+	my $app_id = config->{'app_id'};
 	
 	if (request->path_info !~ m{^/(login|init)}) {
 		
-		if (!session('user_id') || !session('app_id') ) {
-		#if (!session('user_id') || session('app_id') ne $app_id) {
+		#if (!session('user_id') || !session('app_id') ) {
+		if (!session('user_id') || session('app_id') ne $app_id) {
 
 			flash requested_path => request->path_info;
 			request->path_info('/login');

@@ -113,7 +113,8 @@ post '/register' => sub {
 											answer => params->{'answer'},
 											first_name => params->{'first_name'},
 											last_name => params->{'last_name'},
-											company => params->{'company'}
+											company => params->{'company'},
+											application_id => config->{'app_id'}
 									});
 	my $name = params->{'name'};
 
