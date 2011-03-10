@@ -69,11 +69,11 @@ get '/init/:username/:application' => sub {
 
 get '/email/:to'  => sub {
 
-	my $msg = vars->{msg} || 'kissing my ass';
-	my $subject = vars->{subject} || 'kiss my ass';
+	my $msg = vars->{msg} || 'dancer rocks';
+	my $subject = vars->{subject} || 'dancer rocks';
 
 	my $output = email {
-            to => 'harshal@mki.in',
+            to => params->{'to'},
             subject => $subject,
             message => $msg,
             from => 'info@adhril.com'
@@ -118,26 +118,17 @@ post '/register' => sub {
 									});
 	my $name = params->{'name'};
 
-	## send an email
-	
+	my $template = config->{register_message_template} || 'register_message.tt';
+
 	email {
-            to => $username,
-            subject => "Thank you for registering with Adhril",
-            message => <<DATA
-			
-Thank you for registeration. You have regisereted using
+		
+		from => 'info@adhril.com',
+		to => $user->username,
+		subject => config->{register_message_subject},
+		message => template $template, { username => $username , password => $password }
+	};	
 
-Username : $username
-Password : $password
-
-Kindly visit /login to move further.
-
-Adhril.
-
-DATA
-	};
-
-	$user_rs->create({ username => $username, password => $password });
+	## send an email
 
 	template 'login';
 };
