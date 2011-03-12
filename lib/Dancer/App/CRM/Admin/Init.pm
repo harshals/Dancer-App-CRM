@@ -133,43 +133,11 @@ post '/register' => sub {
 	template 'login';
 };
 
-get '/forgot_password' => sub {
-
-	template 'forgot_password';
-};
-
-
-post '/forgot_password' => sub {
+get '/css' =>  sub {
 	
-	my $db = schema('master');
-	
-	$db->user(1);
-
-	my $user_rs = $db->resultset("User");
-
-	if ( $user_rs->search({ 'username' => params->{'username'} })->count) {
-		
-		my $user = $user_rs->search({ 'username' => params->{'username'} })->first;
-
-		if ($user->question_id eq params->{'question_id'} && $user->answer eq params->{'answer'}) {
-			
-			$user->password(params->{'password'});
-
-			$user->update;
-			
-			return template 'login', { message => 'Password changed successfully'};
-		} else {
-
-			return template 'forgot_password', { message => "Answer does not match ."  };
-		}
-
-	}else {
-		
-		return template 'forgot_password', { message => "No such user found."  };
-	}
+	content_type 'text/css';
+	send_file 'css/style.css';
 };
-
-
 
 1;
 
