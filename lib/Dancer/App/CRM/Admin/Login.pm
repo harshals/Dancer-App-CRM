@@ -70,8 +70,6 @@ post '/login' => sub {
 		
 		session profile_id => $user->profile_id;
 		
-		set_cookie 'profile_id' => session('profile_id');
-
     	redirect flash('requested_path') || '/';
 
     } else {
